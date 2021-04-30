@@ -21,3 +21,24 @@ def create_planet():
             "Message": f"Planet with {new_planet.id} has been created"}, 201
 
 
+@planet_bp.route("", methods=["GET"])
+def display_planets():
+    planets = Planet.query.all()
+    planets_response = []
+    for planet in planets:
+        planets_response.append(planet.to_json())
+
+    return jsonify(planets_response, 200)
+
+@planet_bp.route("</planet_id>", methods=["GET"])
+def get_single_planets(planet_id):
+    
+    planet = Planet.query.get(planet_id)
+
+    if planet:
+        return planet.to_json(), 200
+
+    return {
+        "message": f"Planet with {planet_id} was not found",
+        "success": False
+    }, 404
