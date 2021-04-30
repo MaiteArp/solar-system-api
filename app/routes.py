@@ -30,7 +30,7 @@ def display_planets():
 
     return jsonify(planets_response, 200)
 
-@planet_bp.route("</planet_id>", methods=["GET"])
+@planet_bp.route("/<planet_id>", methods=["GET"])
 def get_single_planets(planet_id):
     
     planet = Planet.query.get(planet_id)
