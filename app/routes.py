@@ -18,7 +18,7 @@ def create_planet():
     db.session.commit()
 
     return {"Success": True, 
-            "Message": f"Planet with {new_planet.id} has been created"}, 201
+            "Message": f"Planet with id {new_planet.id} has been created"}, 201
 
 
 @planet_bp.route("", methods=["GET"])
@@ -39,6 +39,6 @@ def get_single_planets(planet_id):
         return planet.to_json(), 200
 
     return {
-        "message": f"Planet with {planet_id} was not found",
+        "message": f"Planet with id {planet_id} was not found",
         "success": False
     }, 404
