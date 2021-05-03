@@ -30,15 +30,32 @@ def display_planets():
 
     return jsonify(planets_response, 200)
 
-@planet_bp.route("/<planet_id>", methods=["GET"])
+@planet_bp.route("/<planet_id>", methods=["GET", "PUT", "DELETE"])
 def get_single_planets(planet_id):
     
     planet = Planet.query.get(planet_id)
 
-    if planet:
-        return planet.to_json(), 200
-
-    return {
+    if not planet:
+        return {
         "message": f"Planet with id {planet_id} was not found",
         "success": False
     }, 404
+        
+
+    if request.method == "GET":
+        return planet.to_json(), 200
+
+    elif request.method == "DELETE":
+        db.session.delete(planet)
+        db.session.commit()
+        return {"Success": True, 
+            "Message": f"Planet with id {planet.id} has been deleted"}, 200
+
+    elif request.method == "PUT":
+        request_body = request.get_json()
+        planet.name = request_body['name'] 
+        planet.descirption = request_body['description']
+        planet.distance_from_sun = request_body['distance_from_sun']
+        db.session.commit()
+        return {"Success": True, 
+            "Message": f"Planet with id {planet.id} has been updated"}, 200
