@@ -1,7 +1,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from os import path
+import os 
+from dotenv import load_dotenv
 
 db = SQLAlchemy()
 
@@ -12,15 +13,15 @@ migrate = Migrate()
 def create_app(test_config=None):
     app = Flask(__name__)
 
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    connection_string = 'postgresql+psycopg2://postgres:postgres@localhost:5432/solar_system_development'
-    
-    if path.isfile("connection-string"):
-        with open('connection-string', mode='r') as huzzah:
-            what_i_read = huzzah.read()
-            stripped = what_i_read.strip()
-            connection_string = stripped
-    app.config['SQLALCHEMY_DATABASE_URI'] = connection_string
+    ['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    if not test_config:
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+    else:
+        app.config["TESTING"] = True
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get('SQLALCHEMY_TEST_DATABASE_URI')
+
+
 
 
     db.init_app(app)
