@@ -34,16 +34,16 @@ def display_planets():
 def get_single_planets(planet_id):
     
     planet = Planet.query.get(planet_id)
-
+    
     if not planet:
         return {
-        "message": f"Planet with id {planet_id} was not found",
-        "success": False
+    "message": f"Planet with id {planet_id} was not found",
+    "success": False
     }, 404
         
-
     if request.method == "GET":
         return planet.to_json(), 200
+
 
     elif request.method == "DELETE":
         db.session.delete(planet)

@@ -21,4 +21,18 @@ def app():
 def client(app):
     return app.test_client()
 
-    
+
+@pytest.fixture
+def adds_two_panets(app):
+#Arrange
+    mercury = Planet(name="mercury",
+    description="First from the sun",
+    distance_from_sun=29.839
+    )
+    venus = Planet(name="venus",
+    description="Second from the sun",
+    distance_from_sun=67.04
+    )
+    db.session.add_all([mercury, venus])
+    db.session.commit()
+
