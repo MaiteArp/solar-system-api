@@ -12,11 +12,10 @@ def test_get_all_planets_with_no_records(client):
     assert response_body[0] == []
 
 # get planets with id number
-def test_get_planet_by_id(client, adds_two_panets):
+def test_get_planet_by_id(client, adds_two_planets):
     #Act
     response = client.get("/planets/1")
     response_body = response.get_json()
-    print(response_body)
     #Assert
     assert response.status_code == 200
     assert response_body == {"name": "mercury",
@@ -36,7 +35,7 @@ def test_get_planets_empty_db(client):
 
 
 # get planets with populated db returns list
-def test_get_planets_with_records(client, adds_two_panets):
+def test_get_planets_with_records(client, adds_two_planets):
     #Act
     response = client.get("/planets")
     response_body = response.get_json()
@@ -65,3 +64,16 @@ def test_post_planet(client):
     #Assert
     assert post.status_code == 201
     assert response_body["Success"] == True
+
+# get one planet with query params 
+def test_get_planet_with_query_params(client, adds_two_planets):
+    #act
+    response = client.get("/planets", query_string={"name": "mercury"})
+    response_body = response.get_json()
+    print(response_body)
+    #assert
+    assert response.status_code == 200
+    assert response_body[0] == [{ "id": 1, 
+                                "name": "mercury", 
+                                "description": "First from the sun", 
+                                "distance_from_sun": 29.839}]

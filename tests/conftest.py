@@ -23,7 +23,7 @@ def client(app):
 
 
 @pytest.fixture
-def adds_two_panets(app):
+def adds_two_planets(app):
 #Arrange
     mercury = Planet(name="mercury",
     description="First from the sun",
